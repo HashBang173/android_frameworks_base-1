@@ -29,6 +29,8 @@ import android.widget.TextView;
 
 import com.android.systemui.R;
 
+import cyanogenmod.providers.CMSettings;
+
 /*
 *
 * Seeing how an Integer object in java requires at least 16 Bytes, it seemed awfully wasteful
@@ -182,14 +184,14 @@ public class NetworkTraffic extends TextView {
 
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
-            Uri uri = Settings.System.getUriFor(Settings.System.NETWORK_TRAFFIC_STATE);
+            Uri uri = CMSettings.Secure.getUriFor(CMSettings.Secure.NETWORK_TRAFFIC_STATE);
             resolver.registerContentObserver(uri, false,
                     this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System
-                    .getUriFor(Settings.System.NETWORK_TRAFFIC_AUTOHIDE), false,
+            resolver.registerContentObserver(CMSettings.Secure
+                    .getUriFor(CMSettings.Secure.NETWORK_TRAFFIC_AUTOHIDE), false,
                     this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System
-                    .getUriFor(Settings.System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD), false,
+            resolver.registerContentObserver(CMSettings.Secure
+                    .getUriFor(CMSettings.Secure.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD), false,
                     this, UserHandle.USER_ALL);
         }
 
@@ -277,15 +279,15 @@ public class NetworkTraffic extends TextView {
     private void updateSettings() {
         ContentResolver resolver = mContext.getContentResolver();
 
-        mAutoHide = Settings.System.getIntForUser(resolver,
-                Settings.System.NETWORK_TRAFFIC_AUTOHIDE, 0,
+        mAutoHide = CMSettings.Secure.getIntForUser(resolver,
+                CMSettings.Secure.NETWORK_TRAFFIC_AUTOHIDE, 0,
                 UserHandle.USER_CURRENT) == 1;
 
-        mAutoHideThreshold = Settings.System.getIntForUser(resolver,
-                Settings.System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD, 10,
+        mAutoHideThreshold = CMSettings.Secure.getIntForUser(resolver,
+                CMSettings.Secure.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD, 10,
                 UserHandle.USER_CURRENT);
 
-        mState = Settings.System.getInt(resolver, Settings.System.NETWORK_TRAFFIC_STATE, 0);
+        mState = CMSettings.Secure.getInt(resolver, CMSettings.Secure.NETWORK_TRAFFIC_STATE, 0);
 
         int mNetworkTrafficColor = mIconTint;
 
